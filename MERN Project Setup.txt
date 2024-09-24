@@ -1,0 +1,47 @@
+setup 
+
+Front-End App 
+1: npm init vite 
+2: then enter project name 
+3: then select React 
+4: select JavaScript 
+S: cd to the project folder 
+6: npm install 
+7: npm run dev 
+8: npm install axios 
+
+npm install axios react-router-dom
+
+
+12 Server side App: 
+1: npm init -y 
+2: npm install express mongoose cors nodemon bcrypt 
+npm install jsonwebtoken
+npm i multer
+
+"start": "nodemon index.js"
+
+npm i jsonwebtoken
+
+
+--------------------------------------------------
+
+//127.0.0.1:27017
+
+1. Context API:
+The Context API is a built-in feature of React that allows you to share state across components without passing props manually through each level of the component tree. It provides a simple and lightweight way to manage global state.
+
+How Context API Works:
+Context: You create a context using React.createContext(), which holds a shared state.
+Provider: The context has a Provider component that wraps the components needing access to the shared state. The Provider supplies the state to its children.
+Consumer: Components that need to access the state use the useContext hook (in functional components) or the Context.Consumer (in class components).
+
+
+
+
+
+
+
+
+
+
