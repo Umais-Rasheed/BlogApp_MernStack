@@ -5,13 +5,13 @@
 }
 .navbar-header {
     width: 100%;
-    height: 40px;
-    padding: 15px 25px;
+    height: 60px;
+    padding: 29px 32px;
     color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: linear-gradient(79deg, rgb(3,3,154),rgb(207,8,41),rgb(4,4,150));
+    background: linear-gradient(79deg, rgb(24, 105, 228),rgb(67, 153, 224),rgb(7, 7, 129));
     
 }
 .link {
@@ -36,3 +36,18 @@
     justify-content: center;
     align-items: center;
   }
+.post_text {
+    padding: 4px;
+    overflow: hidden; 
+    display: -webkit-box; 
+    -webkit-box-orient: vertical;
+    line-clamp: 10;
+    -webkit-line-clamp: 10; 
+    text-overflow: ellipsis;
+    text-align: justify;
+}
+.home_page_post {
+    text-decoration: none; 
+    color: inherit; 
+}
+  

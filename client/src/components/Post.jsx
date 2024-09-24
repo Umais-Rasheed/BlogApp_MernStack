@@ -19,7 +19,7 @@ function Post() {
   const handleDelete = (id) => {
     axios.delete('http://localhost:3001/deletepost/'+id)
     .then(result => {
-        navigate('/home')
+        navigate('/')
   })
     .catch(err => console.log(err))
   }
@@ -28,14 +28,20 @@ function Post() {
     <div className="container mt-5 mb-5">
         <div className="row">
             <h2 className="d-flex justify-content-center align-items-center mb-4">Edit Your Blog</h2>
-            <div className="col-md-6 offset-md-3 text-center">
+            <div className="col-md-12 text-center">
             <img 
                 src={`http://localhost:3001/Images/${post.file}`} 
                 alt="blog_capture" 
                 className="img-fluid mb-3" 
-                style={{ height: '400px', width: '600px', objectFit: 'cover' }} 
+                style={{ height: '500px', width: '800px', objectFit: 'contain' }} 
             />
             <h2 className="mb-2">{post.title}</h2>
+            <p className="text-muted m-0">
+              {new Date(post.createdAt).toLocaleString()}
+            </p>
+            <p className='text-muted m-0'>
+              <span className=''>Posted By:</span> {post.email}
+            </p>
             <p>{post.description}</p>
             </div>
             <div className="center-buttons">

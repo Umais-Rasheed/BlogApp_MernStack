@@ -4,10 +4,12 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const UserModel = require('./models/UserModel')
 const PostModel = require('./models/PostModel')
+const ContactModel = require('./models/ContactModel')
 const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 app.use(express.json()); 
@@ -42,7 +44,7 @@ const verifyUser = (req, res, next) => {
     }
 }
 
-app.get('/home', verifyUser, (req, res) => {
+app.get('/', verifyUser, (req, res) => {
     return res.json({email: req.email, username: req.username})
 })
 
@@ -81,6 +83,24 @@ app.post("/login", (req, res) => {
     .catch(err => res.json(err));
 });
 
+// contact
+app.post('/contact', (req, res) => {
+    const { name, email, country, subscribe, description } = req.body;
+  
+    // Create a new contact
+    ContactModel.create({
+      name,
+      email,
+      country,
+      subscription: subscribe,  
+      description,
+      createdAt: new Date()
+    })
+      .then(contact => res.status(200).json("Success"))
+      .catch(err => res.status(500).json({ error: "Error saving contact", details: err }));
+  });
+  
+
 // storage
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -99,9 +119,13 @@ const upload = multer({
 // createPost
 app.post('/create', verifyUser, upload.single('file'), (req, res) => {
     // console.log(req.file)
-    PostModel.create({title: req.body.title,
+    PostModel.create({
+        title: req.body.title,
         description: req.body.description,
-        file: req.file.filename, email: req.body.email})
+        file: req.file.filename, 
+        email: req.body.email,
+        createdAt: Date.now()
+    })
         .then(result => res.json("Success"))
         .catch(err => res.json(err))
 } )
@@ -121,16 +145,40 @@ app.get('/getpostbyid/:id', (req, res) => {
     .catch(err => console.log(err))
 })
 
-// updatepost
-app.put('/editpost/:id', (req, res) => {
+// Update post with image
+app.put('/editpost/:id', upload.single('file'), (req, res) => {
     const id = req.params.id;
-    PostModel.findByIdAndUpdate(
-    {_id: id}, {
-        title: req.body.title,
-        description: req.body.description}
-        ).then(result => res.json("Success"))
-            .catch(err => res.json(err))
-})
+  
+    PostModel.findById(id)
+      .then(post => {
+        if (req.file) {
+          // Delete the old file if a new file is uploaded
+          const oldFilePath = path.join(__dirname, 'Public/Images', post.file);
+          if (fs.existsSync(oldFilePath)) {
+            fs.unlinkSync(oldFilePath); 
+          }
+          post.file = req.file.filename;
+        }
+        post.title = req.body.title;
+        post.description = req.body.description;
+        return post.save();
+      })
+      .then(updatedPost => res.json({ success: 'Success', imagePath: updatedPost.file }))
+        .catch(err => res.json(err));
+  });
+  
+// 
+
+// updatepost
+// app.put('/editpost/:id', (req, res) => {
+//     const id = req.params.id;
+//     PostModel.findByIdAndUpdate(
+//     {_id: id}, {
+//         title: req.body.title,
+//         description: req.body.description}
+//         ).then(result => res.json("Success"))
+//             .catch(err => res.json(err))
+// })
 
 // delete
 app.delete('/deletepost/:id', (req, res) => {

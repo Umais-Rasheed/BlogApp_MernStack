@@ -1,29 +1,47 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 function EditPost() {
-  const [title, setTitle] = useState('');  // Initialize with an empty string
-  const [description, setDescription] = useState('');  // Initialize with an empty string
+  const navigate = useNavigate()
+  const [title, setTitle] = useState('');  
+  const [description, setDescription] = useState(''); 
+  const [file, setFile] = useState('');  
   const { id } = useParams();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    axios.put(`http://localhost:3001/editpost/${id}`, { title, description })
-      .then(res => {
-        if (res.data === "Success") {
-          window.location.href = "/home";
-        }
-      })
-      .catch(err => console.log(err));
+    // Prepare form data
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
+    if (file) {
+      formData.append('file', file);
+    }
+
+    axios.put(`http://localhost:3001/editpost/${id}`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+    .then(res => {
+      console.log(res.data); 
+      if (res.data.message === "Success") {
+        navigate('/');
+      }
+       {
+        navigate('/');
+      }
+    })
+    .catch(err => console.log(err));
+  
   };
 
   useEffect(() => {
     axios.get(`http://localhost:3001/getpostbyid/${id}`)
       .then(result => {
         setTitle(result.data.title || '');  // Default to empty string if undefined
-        setDescription(result.data.description || '');  // Default to empty string if undefined
+        setDescription(result.data.description || '');  
+        setFile(result.data.file || '');  
       })
       .catch(err => console.log(err));
   }, [id]);
@@ -55,6 +73,14 @@ function EditPost() {
               placeholder="Enter description"
               onChange={e => setDescription(e.target.value)}
               value={description}
+            />
+          </div>
+          <div className="form-group mt-4">
+            <label htmlFor="fileUpload">Upload new file</label>
+            <input 
+              type="file" 
+              className="form-control-file"  
+              onChange={e => setFile(e.target.files[0])}  // Set file to the uploaded one
             />
           </div>
           <button type="submit" className="btn btn-primary mt-4" style={{ width: '200px' }}>Update</button>

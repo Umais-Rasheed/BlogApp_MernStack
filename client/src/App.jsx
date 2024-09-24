@@ -10,6 +10,8 @@ import axios from 'axios';
 import CreatePost from './components/CreatePost';
 import Post from './components/Post';
 import EditPost from './components/EditPost';
+import ContactUs from './components/ContactUs';
+import Footer from './components/Footer';
 
 export const userContext = createContext()
 
@@ -18,7 +20,7 @@ function App() {
   
   axios.defaults.withCredentials = true;
   useEffect(() => {
-    axios.get('http://localhost:3001/home')
+    axios.get('http://localhost:3001/')
     .then(user => {
       // console.log(user);
       setUser(user.data)
@@ -30,13 +32,15 @@ function App() {
     <BrowserRouter>
       <Navbar />
       <Routes>
-      <Route path='/home' element={<Home />}></Route>
+      <Route path='/' element={<Home />}></Route>
       <Route path='/register' element={<Register />}></Route>
+      <Route path='/contactus' element={<ContactUs />}></Route>
       <Route path='/login' element={<Login />}></Route>
       <Route path='/create' element={<CreatePost />}></Route>
       <Route path='/post/:id' element={<Post />}></Route>
       <Route path='/editpost/:id' element={<EditPost />}></Route>
       </Routes>
+      <Footer />
     </BrowserRouter>
     </userContext.Provider>
   )

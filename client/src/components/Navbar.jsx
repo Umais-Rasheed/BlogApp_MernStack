@@ -16,17 +16,18 @@ function Navbar() {
    }
   return (
     <div className='navbar-header'>
-        <div>
-            <h3>Blog App</h3>
+        <div className='d-flex justify-content-center align-items-center' >
+          <img className='m-1' src="./src/assets/png-transparent-blogger-removebg-preview.png" alt="logo" style={{width:"50px", height:"60px"}}/>
+          <h3 className='ml-2'>Blog App</h3>
         </div>
         <div>
-        <Link to="/home" className='link'>Home</Link>
+        <Link to="/" className='link'>Home</Link>
         {
             user.username ?
             <Link to='/create' className='link'>Create</Link>
             : <></>
         }
-        <a href="" className='link'>Contact</a>
+        <a href="/contactus" className='link'>Contact</a>
         </div>
         {
           user.username ?

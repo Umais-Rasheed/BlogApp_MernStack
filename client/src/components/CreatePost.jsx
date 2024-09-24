@@ -19,18 +19,11 @@ function CreatePost() {
         axios.post('http://localhost:3001/create', formData) 
         .then(res => {
           if(res.data === "Success") {
-            window.location.href = "/home"
+            window.location.href = "/"
           }
         })
         .catch(err=> console.log(err))
     }
-
-    const handleInputChange = (e) => {
-        const lines = e.target.value.split('\n').length; // Count lines
-        if (lines <= 8) {  // Limit to 8 lines
-          setDescription(e.target.value);
-        }
-      };
 
   return (
     <div className='App'>
